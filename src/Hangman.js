@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Hangman.css";
+import AlphaButtons from "./AlphaButtons";
 import { randomWord } from "./words";
 import img0 from "./0.jpg";
 import img1 from "./1.jpg";
@@ -19,7 +20,9 @@ class Hangman extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      gameWon: false,
       nWrong: 0,
+      nRight: 0,
       guessed: new Set(),
       answer: randomWord()
     };
@@ -46,25 +49,35 @@ class Hangman extends Component {
       guessed: st.guessed.add(ltr),
       nWrong: st.nWrong + (st.answer.includes(ltr) ? 0 : 1)
     }));
-  }
 
-  /** generateButtons: return array of letter buttons to render */
-  generateButtons() {
-    return "abcdefghijklmnopqrstuvwxyz".split("").map(ltr => (
-      <button
-        value={ltr}
-        onClick={this.handleGuess}
-        disabled={this.state.guessed.has(ltr)}
-        key={ltr}
-      >
-        {ltr}
-      </button>
-    ));
+    // const countInAnswer = this.state.answer.split(ltr).length - 1;
+    // if (
+    //   this.state.nRight === this.state.answer.length - countInAnswer &&
+    //   this.state.answer.includes(ltr)
+    // ) {
+    //   this.setState(st => ({ gameWon: true }));
+    // }
+    // console.log("countInAnswer ->", countInAnswer);
+    // countInAnswer
+    //   ? this.setState(st => ({
+    //       nRight: st.nRight + countInAnswer
+    //     }))
+    //   : this.setState(st => ({
+    //       guessed: st.guessed.add(ltr),
+    //       nWrong: st.nWrong + 1
+    //     }));
+    // if (this.state.nRight === this.state.answer.length) {
+    //   this.setState({ gameWon: true });
+    // }
+    // this.state.nRight === this.state.answer.length &&
+    //   this.setState({ gameWon: true });
   }
 
   handleRestart() {
     this.setState({
+      gameWon: false,
       answer: randomWord(),
+      nRight: 0,
       nWrong: 0,
       guessed: new Set()
     });
@@ -80,9 +93,14 @@ class Hangman extends Component {
           alt={`${this.state.nWrong} of 6 wrong guesses`}
         />
         <p># of wrong guesses: {this.state.nWrong}</p>
+        {this.state.gameWon && <p>You won!!</p>}
         <p className="Hangman-word">{this.guessedWord()}</p>
         {this.state.nWrong < this.props.maxWrong ? (
-          <p className="Hangman-btns">{this.generateButtons()}</p>
+          <AlphaButtons
+            handleGuess={this.handleGuess}
+            guessed={this.state.guessed}
+            gameWon={this.state.gameWon}
+          />
         ) : (
           <p>Sorry you lost..</p>
         )}
