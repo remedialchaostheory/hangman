@@ -49,6 +49,7 @@ class Hangman extends Component {
         value={ltr}
         onClick={this.handleGuess}
         disabled={this.state.guessed.has(ltr)}
+        key={ltr}
       >
         {ltr}
       </button>
