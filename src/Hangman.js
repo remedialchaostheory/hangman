@@ -21,10 +21,12 @@ class Hangman extends Component {
     super(props);
     this.state = {
       gameOver: false,
+      gameWon: false,
       nWrong: 0,
       nRight: 0,
       guessed: new Set(),
-      answer: randomWord()
+      answer: randomWord(),
+      correct: new Set()
     };
     this.handleGuess = this.handleGuess.bind(this);
     this.handleRestart = this.handleRestart.bind(this);
@@ -45,37 +47,29 @@ class Hangman extends Component {
   */
   handleGuess(evt) {
     let ltr = evt.target.value;
+    const answerSetSize = new Set(this.state.answer).size;
     this.setState(st => ({
-      guessed: st.guessed.add(ltr),
-      nWrong: st.nWrong + (st.answer.includes(ltr) ? 0 : 1)
+      guessed: st.guessed.add(ltr)
     }));
-
-    // const countInAnswer = this.state.answer.split(ltr).length - 1;
-    // if (
-    //   this.state.nRight === this.state.answer.length - countInAnswer &&
-    //   this.state.answer.includes(ltr)
-    // ) {
-    //   this.setState(st => ({ gameOver: true }));
-    // }
-    // console.log("countInAnswer ->", countInAnswer);
-    // countInAnswer
-    //   ? this.setState(st => ({
-    //       nRight: st.nRight + countInAnswer
-    //     }))
-    //   : this.setState(st => ({
-    //       guessed: st.guessed.add(ltr),
-    //       nWrong: st.nWrong + 1
-    //     }));
-    // if (this.state.nRight === this.state.answer.length) {
-    //   this.setState({ gameOver: true });
-    // }
-    // this.state.nRight === this.state.answer.length &&
-    //   this.setState({ gameOver: true });
+    if (this.state.answer.includes(ltr)) {
+      if (this.state.correct.size === answerSetSize - 1) {
+        this.setState({ gameWon: true });
+        return;
+      }
+      this.setState(st => ({
+        correct: st.correct.add(ltr)
+      }));
+    } else {
+      this.setState(st => ({
+        nWrong: st.nWrong + (st.answer.includes(ltr) ? 0 : 1)
+      }));
+    }
   }
 
   handleRestart() {
     this.setState({
       gameOver: false,
+      gameWon: false,
       answer: randomWord(),
       nRight: 0,
       nWrong: 0,
@@ -94,7 +88,7 @@ class Hangman extends Component {
           alt={`${this.state.nWrong} of ${this.props.maxWrong} wrong guesses`}
         />
         <p># of wrong guesses: {this.state.nWrong}</p>
-        {this.guessedWord().join("") === this.state.answer && <p>You won!!</p>}
+        {this.state.gameWon && <p>You won!!</p>}
         <p className="Hangman-word">
           {gameLost ? this.state.answer : this.guessedWord()}
         </p>
@@ -105,7 +99,7 @@ class Hangman extends Component {
           <AlphaButtons
             handleGuess={this.handleGuess}
             guessed={this.state.guessed}
-            gameOver={this.state.gameOver}
+            gameWon={this.state.gameWon}
           />
         )}
         <div>

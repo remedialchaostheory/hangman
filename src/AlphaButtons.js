@@ -1,21 +1,15 @@
 import React, { Component } from "react";
 
 class AlphaButtons extends Component {
-  static defaultProps = {};
-  constructor(props) {
-    super(props);
-  }
-
   /** generateButtons: return array of letter buttons to render */
   generateButtons() {
     return "abcdefghijklmnopqrstuvwxyz".split("").map(ltr => (
       <button
         value={ltr}
         onClick={this.props.handleGuess}
-        // disabled={this.props.gameOver && this.props.guessed.has(ltr)}
-        disabled={this.props.gameOver ? true : this.props.guessed.has(ltr)}
+        disabled={this.props.gameWon ? true : this.props.guessed.has(ltr)}
         key={ltr}
-        className={this.props.guessed.has(ltr) && "guessed"}
+        className={this.props.guessed.has(ltr) ? "guessed" : ""}
       >
         {ltr}
       </button>
