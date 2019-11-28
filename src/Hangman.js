@@ -20,7 +20,7 @@ class Hangman extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gameWon: false,
+      gameOver: false,
       nWrong: 0,
       nRight: 0,
       guessed: new Set(),
@@ -55,7 +55,7 @@ class Hangman extends Component {
     //   this.state.nRight === this.state.answer.length - countInAnswer &&
     //   this.state.answer.includes(ltr)
     // ) {
-    //   this.setState(st => ({ gameWon: true }));
+    //   this.setState(st => ({ gameOver: true }));
     // }
     // console.log("countInAnswer ->", countInAnswer);
     // countInAnswer
@@ -67,15 +67,15 @@ class Hangman extends Component {
     //       nWrong: st.nWrong + 1
     //     }));
     // if (this.state.nRight === this.state.answer.length) {
-    //   this.setState({ gameWon: true });
+    //   this.setState({ gameOver: true });
     // }
     // this.state.nRight === this.state.answer.length &&
-    //   this.setState({ gameWon: true });
+    //   this.setState({ gameOver: true });
   }
 
   handleRestart() {
     this.setState({
-      gameWon: false,
+      gameOver: false,
       answer: randomWord(),
       nRight: 0,
       nWrong: 0,
@@ -85,6 +85,7 @@ class Hangman extends Component {
 
   /** render: render game */
   render() {
+    // let gameOver =
     return (
       <div className="Hangman">
         <h1>Hangman</h1>
@@ -93,13 +94,13 @@ class Hangman extends Component {
           alt={`${this.state.nWrong} of 6 wrong guesses`}
         />
         <p># of wrong guesses: {this.state.nWrong}</p>
-        {this.state.gameWon && <p>You won!!</p>}
+        {this.state.gameOver && <p>You won!!</p>}
         <p className="Hangman-word">{this.guessedWord()}</p>
         {this.state.nWrong < this.props.maxWrong ? (
           <AlphaButtons
             handleGuess={this.handleGuess}
             guessed={this.state.guessed}
-            gameWon={this.state.gameWon}
+            gameOver={this.state.gameOver}
           />
         ) : (
           <p>Sorry you lost..</p>

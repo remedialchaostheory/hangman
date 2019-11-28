@@ -12,8 +12,8 @@ class AlphaButtons extends Component {
       <button
         value={ltr}
         onClick={this.props.handleGuess}
-        // disabled={this.props.gameWon && this.props.guessed.has(ltr)}
-        disabled={this.props.gameWon ? true : this.props.guessed.has(ltr)}
+        // disabled={this.props.gameOver && this.props.guessed.has(ltr)}
+        disabled={this.props.gameOver ? true : this.props.guessed.has(ltr)}
         key={ltr}
         className={this.props.guessed.has(ltr) && "guessed"}
       >
