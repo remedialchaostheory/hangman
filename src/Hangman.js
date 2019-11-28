@@ -23,7 +23,6 @@ class Hangman extends Component {
       gameOver: false,
       gameWon: false,
       nWrong: 0,
-      nRight: 0,
       guessed: new Set(),
       answer: randomWord(),
       correct: new Set()
@@ -61,7 +60,7 @@ class Hangman extends Component {
       }));
     } else {
       this.setState(st => ({
-        nWrong: st.nWrong + (st.answer.includes(ltr) ? 0 : 1)
+        nWrong: st.nWrong + 1
       }));
     }
   }
@@ -71,7 +70,6 @@ class Hangman extends Component {
       gameOver: false,
       gameWon: false,
       answer: randomWord(),
-      nRight: 0,
       nWrong: 0,
       guessed: new Set()
     });
